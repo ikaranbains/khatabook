@@ -8,8 +8,10 @@ async function bootstrap() {
   const env = getEnv();
   await connectDb(env.mongoUri);
 
-  const server = app.listen(env.port, () => {
-    console.log(`Backend listening on port ${env.port}`);
+  const PORT = process.env.PORT || env.port || 5000;
+
+  const server = app.listen(PORT, () => {
+    console.log(`Backend listening on port ${PORT}`);
   });
 
   const shutdown = async (signal) => {
