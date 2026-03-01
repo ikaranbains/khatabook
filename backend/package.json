@@ -4,10 +4,10 @@
   "description": "Scalable backend API for finance-manager using Express + MongoDB",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
-    "lint": "node --check src/server.js",
-    "seed": "node src/scripts/seed.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "node --check server.js",
+    "seed": "node scripts/seed.js"
   },
   "engines": {
     "node": ">=18"

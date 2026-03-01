@@ -972,7 +972,7 @@ Support for multiple currencies and international users.
 - 21 components
 - ~2,000 LOC
 - 3 main tabs (Dashboard, Transactions, Budget)
-- GST calculation
+- Category-based expense tracking
 - Dark/Light theme
 - Responsive design
 

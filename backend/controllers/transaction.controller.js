@@ -15,19 +15,6 @@ const sortMap = {
   "-name": { name: -1 },
 };
 
-function sanitizeGstForType(payload, fallbackType, fallbackAmount) {
-  const type = payload.type || fallbackType;
-  if (type === "expense") return payload;
-
-  const amount =
-    payload.amount !== undefined && payload.amount !== null ? payload.amount : fallbackAmount;
-  return {
-    ...payload,
-    gstAmount: 0,
-    totalAmount: amount || 0,
-  };
-}
-
 function withNameFallback(transaction) {
   const object = typeof transaction.toObject === "function" ? transaction.toObject() : transaction;
   const normalizedName =
@@ -81,15 +68,11 @@ const listTransactions = asyncHandler(async (req, res) => {
 });
 
 const createTransaction = asyncHandler(async (req, res) => {
-  const payload = sanitizeGstForType(
-    {
-      ...req.validated.body,
-      description: req.validated.body.description || "",
-      workspaceId: req.workspaceId,
-    },
-    req.validated.body.type,
-    req.validated.body.amount,
-  );
+  const payload = {
+    ...req.validated.body,
+    description: req.validated.body.description || "",
+    workspaceId: req.workspaceId,
+  };
 
   const transaction = await Transaction.create(payload);
   return sendSuccess(res, withNameFallback(transaction), "Transaction created", 201);
@@ -124,8 +107,6 @@ const updateTransaction = asyncHandler(async (req, res) => {
   if ("description" in updatePayload) {
     updatePayload.description = updatePayload.description || "";
   }
-
-  updatePayload = sanitizeGstForType(updatePayload, existing.type, existing.amount);
 
   const transaction = await Transaction.findOneAndUpdate(
     { _id: req.validated.params.id, workspaceId: req.workspaceId },

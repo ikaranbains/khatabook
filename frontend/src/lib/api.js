@@ -70,10 +70,6 @@ function normalizeTransaction(item) {
     (item.description && String(item.description).trim()) ||
     "Untitled transaction";
   const amount = Number(item.amount || 0);
-  const type = item.type;
-  const gstAmount = type === "expense" ? Number(item.gstAmount || 0) : 0;
-  const totalAmount =
-    type === "expense" ? Number(item.totalAmount || amount || 0) : amount;
 
   return {
     ...item,
@@ -81,8 +77,6 @@ function normalizeTransaction(item) {
     name: normalizedName,
     description: item.description || "",
     amount,
-    gstAmount,
-    totalAmount,
     date: item.date || item.createdAt,
   };
 }

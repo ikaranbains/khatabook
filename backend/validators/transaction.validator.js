@@ -15,8 +15,6 @@ const createTransactionSchema = z.object({
     date: z.coerce.date().optional(),
     category: z.string().trim().min(1).max(60).optional(),
     tags: z.array(z.string().trim().min(1).max(30)).max(20).optional(),
-    gstAmount: z.coerce.number().min(0).optional(),
-    totalAmount: z.coerce.number().min(0).optional(),
     source: z.enum(["manual", "import", "recurring", "bank"]).optional(),
     meta: z.record(z.string(), z.any()).optional(),
   }),
@@ -35,8 +33,6 @@ const updateTransactionSchema = z.object({
       date: z.coerce.date().optional(),
       category: z.string().trim().min(1).max(60).optional(),
       tags: z.array(z.string().trim().min(1).max(30)).max(20).optional(),
-      gstAmount: z.coerce.number().min(0).optional(),
-      totalAmount: z.coerce.number().min(0).optional(),
       source: z.enum(["manual", "import", "recurring", "bank"]).optional(),
       meta: z.record(z.string(), z.any()).optional(),
     })

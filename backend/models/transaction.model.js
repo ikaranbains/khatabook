@@ -51,16 +51,6 @@ const transactionSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    gstAmount: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    totalAmount: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
     source: {
       type: String,
       enum: ["manual", "import", "recurring", "bank"],

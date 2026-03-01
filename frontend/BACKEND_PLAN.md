@@ -165,7 +165,7 @@ Represents cash/bank/wallet sources.
 - `counterparty` (optional)
 - `attachments` (S3 keys; optional)
 - `source` (manual, import, recurring, bank)
-- `meta` (gst fields, import provenance, etc.)
+- `meta` (import provenance, etc.)
 
 Indexes:
 

@@ -30,18 +30,6 @@ export const TRANSACTION_CATEGORIES = {
   ],
 };
 
-export const GST_RATES = {
-  Groceries: 0,
-  "Dining Out": 5,
-  Transportation: 5,
-  Shopping: 12,
-  Entertainment: 18,
-  Healthcare: 0,
-  Education: 0,
-  Utilities: 18,
-  Other: 18,
-};
-
 export const BUDGET_CATEGORIES = [
   "Groceries",
   "Rent",
