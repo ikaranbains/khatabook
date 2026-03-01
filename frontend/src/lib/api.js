@@ -1,4 +1,5 @@
-const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+const configuredApiUrl =
+  process.env.NEXT_PUBLIC_API_URL?.trim() || process.env.NEXT_API_BASE_URL?.trim();
 const API_BASE_URL = configuredApiUrl ? configuredApiUrl.replace(/\/$/, "") : "";
 const LOCAL_TRANSACTIONS_KEY = "khatabook_transactions_cache";
 const LOCAL_BUDGETS_KEY = "khatabook_budgets_cache";
