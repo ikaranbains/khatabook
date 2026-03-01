@@ -1,5 +1,7 @@
-const configuredApiUrl =
-  process.env.NEXT_PUBLIC_API_URL?.trim() || process.env.NEXT_API_BASE_URL?.trim();
+const useDirectApi = process.env.NEXT_PUBLIC_USE_DIRECT_API === "true";
+const configuredApiUrl = useDirectApi
+  ? process.env.NEXT_PUBLIC_API_URL?.trim() || process.env.NEXT_API_BASE_URL?.trim()
+  : "";
 const API_BASE_URL = configuredApiUrl ? configuredApiUrl.replace(/\/$/, "") : "";
 const LOCAL_TRANSACTIONS_KEY = "khatabook_transactions_cache";
 const LOCAL_BUDGETS_KEY = "khatabook_budgets_cache";
@@ -39,7 +41,7 @@ async function request(path, { method = "GET", body } = {}) {
   } catch {
     const target = API_BASE_URL || "same-origin /api/v1";
     throw new Error(
-      `Unable to connect to API (${target}). Ensure backend is running on http://localhost:5000.`,
+      `Unable to connect to API (${target}). Check frontend env and backend availability.`,
     );
   }
 

@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
-const backendBaseUrl = (process.env.BACKEND_URL || "http://localhost:5000")
+const isProduction = process.env.NODE_ENV === "production";
+const defaultBackendUrl = isProduction
+  ? "https://khatabook-backend-mdl7.onrender.com"
+  : "http://localhost:5000";
+
+const backendBaseUrl = (process.env.BACKEND_URL || defaultBackendUrl)
   .replace(/\/$/, "")
   .replace(/\/api\/v1\/?$/, "");
 
