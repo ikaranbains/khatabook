@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#151513" rx="102.4"/>
+  
+  <!-- Trending up arrow icon -->
+  <g transform="translate(128, 128)">
+    <!-- Base line -->
+    <line x1="32" y1="224" x2="224" y2="224" stroke="white" stroke-width="24" stroke-linecap="round"/>
+    <!-- Line going up -->
+    <polyline points="32,192 128,64 192,128 224,96" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Arrow head -->
+    <polyline points="224,96 224,32 288,32" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>
