@@ -21,6 +21,11 @@ const workspaceSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 3,
     },
+    salaryAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   { timestamps: true },
 );

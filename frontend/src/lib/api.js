@@ -103,6 +103,27 @@ function normalizeBudget(item) {
   };
 }
 
+function normalizeWorkspace(item) {
+  return {
+    ...item,
+    id: item._id || item.id,
+    salaryAmount: Number(item.salaryAmount || 0),
+  };
+}
+
+async function getCurrentWorkspace() {
+  const data = await request("/api/v1/workspaces/default");
+  return normalizeWorkspace(data || {});
+}
+
+async function updateCurrentWorkspace(updates) {
+  const data = await request("/api/v1/workspaces/default", {
+    method: "PATCH",
+    body: updates,
+  });
+  return normalizeWorkspace(data || {});
+}
+
 async function getTransactions() {
   try {
     const data = await request("/api/v1/transactions");
@@ -164,7 +185,9 @@ async function removeBudget(id) {
 }
 
 export {
+  getCurrentWorkspace,
   getTransactions,
+  updateCurrentWorkspace,
   createTransaction,
   removeTransaction,
   getBudgets,

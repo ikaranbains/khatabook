@@ -1,6 +1,8 @@
 import { JetBrains_Mono, Kodchasan } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import AppQueryProvider from "@/components/QueryProvider";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -90,6 +92,13 @@ export const metadata = {
       should_fallback: true,
     },
   ],
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#ff5f34",
 };
 
 // JSON-LD Structured Data
@@ -224,7 +233,8 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
         className={`${jetbrainsMono.variable} ${kodchasan.variable} antialiased`}
       >
-        {children}
+        <AppQueryProvider>{children}</AppQueryProvider>
+        <ServiceWorkerRegistration />
 
         {/* Noscript fallback */}
         <noscript>

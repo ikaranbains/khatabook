@@ -37,6 +37,13 @@ Backend runs on [http://localhost:5000](http://localhost:5000).
 
 - Frontend now stores and reads transactions/budgets from backend MongoDB APIs.
 - Active tab state is still persisted locally in browser storage.
+- PWA support is enabled with:
+  - `public/manifest.json`
+  - `public/sw.js` (service worker cache strategies)
+  - `public/offline.html` + `/offline` fallback route
+  - Mobile install prompt in-app
+- Service worker registers in production by default. To test in development:
+  - Set `NEXT_PUBLIC_ENABLE_PWA_IN_DEV=true` in `.env.local`
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

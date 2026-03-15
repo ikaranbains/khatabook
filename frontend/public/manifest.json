@@ -5,63 +5,34 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait-primary",
   "theme_color": "#ff5f34",
   "background_color": "#f7f7f5",
   "categories": ["finance", "productivity"],
-  "screenshots": [
-    {
-      "src": "/screenshots/screenshot-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "purpose": "any"
-    },
-    {
-      "src": "/screenshots/screenshot-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide",
-      "purpose": "any"
-    },
-    {
-      "src": "/screenshots/screenshot-maskable-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/screenshots/screenshot-maskable-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide",
-      "purpose": "maskable"
-    }
-  ],
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/icon-192.svg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "/icon-512.svg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon-192x192-maskable.png",
+      "src": "/icon-192.svg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "/icon-512x512-maskable.png",
+      "src": "/icon-512.svg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "maskable"
     }
   ],
@@ -70,12 +41,12 @@
       "name": "Add Transaction",
       "short_name": "Add Transaction",
       "description": "Quickly add a new income or expense transaction",
-      "url": "/?tab=transactions",
+      "url": "/",
       "icons": [
         {
-          "src": "/shortcuts/add-transaction.png",
+          "src": "/icon-192.svg",
           "sizes": "192x192",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -83,12 +54,12 @@
       "name": "View Budget",
       "short_name": "View Budget",
       "description": "Check your budget status and spending",
-      "url": "/?tab=budget",
+      "url": "/",
       "icons": [
         {
-          "src": "/shortcuts/view-budget.png",
+          "src": "/icon-192.svg",
           "sizes": "192x192",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -96,26 +67,16 @@
       "name": "Dashboard",
       "short_name": "Dashboard",
       "description": "View your financial overview",
-      "url": "/?tab=dashboard",
+      "url": "/",
       "icons": [
         {
-          "src": "/shortcuts/dashboard.png",
+          "src": "/icon-192.svg",
           "sizes": "192x192",
-          "type": "image/png"
+          "type": "image/svg+xml"
         }
       ]
     }
   ],
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "application/x-www-form-urlencoded",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  },
   "prefer_related_applications": false,
   "related_applications": []
 }

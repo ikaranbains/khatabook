@@ -1,22 +1,21 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { AlertCircle, CheckCircle } from 'lucide-react';
-import { useMemo } from 'react';
+import { motion } from "framer-motion";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { AlertCircle, CheckCircle, Wallet } from "lucide-react";
+import { useMemo } from "react";
 
-export default function BudgetSummary({ budgets, transactions }) {
+export default function BudgetSummary({ budgets, transactions, salaryAmount = 0 }) {
   const stats = useMemo(() => {
     const expenseByCategory = new Map();
     for (const transaction of transactions) {
-      if (transaction.type !== 'expense') continue;
-      const key = transaction.category || 'Other';
+      if (transaction.type !== "expense") continue;
+      const key = transaction.category || "Other";
       expenseByCategory.set(key, (expenseByCategory.get(key) || 0) + Number(transaction.amount || 0));
     }
 
     const budgetStatus = budgets.map((budget) => {
       const spent = expenseByCategory.get(budget.category) || 0;
-
       const percentage = budget.amount > 0 ? (spent / budget.amount) * 100 : 0;
       const remaining = budget.amount - spent;
 
@@ -25,38 +24,37 @@ export default function BudgetSummary({ budgets, transactions }) {
         spent,
         remaining,
         percentage,
-        status: percentage > 100 ? 'over' : percentage > 80 ? 'warning' : 'good',
+        status: percentage > 100 ? "over" : percentage > 80 ? "warning" : "good",
       };
     });
 
-    const totalBudgeted = budgets.reduce((sum, b) => sum + b.amount, 0);
-    const totalSpent = budgetStatus.reduce((sum, b) => sum + b.spent, 0);
+    const totalBudgeted = budgets.reduce((sum, budget) => sum + budget.amount, 0);
+    const totalSpent = budgetStatus.reduce((sum, budget) => sum + budget.spent, 0);
     const totalRemaining = totalBudgeted - totalSpent;
-    const averageUsage = budgets.length > 0
-      ? budgetStatus.reduce((sum, b) => sum + b.percentage, 0) / budgets.length
-      : 0;
-
-    const overBudgetCount = budgetStatus.filter((b) => b.status === 'over').length;
-    const warningCount = budgetStatus.filter((b) => b.status === 'warning').length;
-    const goodCount = budgetStatus.filter((b) => b.status === 'good').length;
+    const salaryRemaining = salaryAmount - totalBudgeted;
+    const averageUsage =
+      budgets.length > 0
+        ? budgetStatus.reduce((sum, budget) => sum + budget.percentage, 0) / budgets.length
+        : 0;
 
     return {
       totalBudgeted,
       totalSpent,
       totalRemaining,
+      salaryRemaining,
       averageUsage,
-      overBudgetCount,
-      warningCount,
-      goodCount,
+      overBudgetCount: budgetStatus.filter((budget) => budget.status === "over").length,
+      warningCount: budgetStatus.filter((budget) => budget.status === "warning").length,
+      goodCount: budgetStatus.filter((budget) => budget.status === "good").length,
       budgetStatus,
     };
-  }, [budgets, transactions]);
+  }, [budgets, salaryAmount, transactions]);
 
   const currencyFormatter = useMemo(
     () =>
-      new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
+      new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }),
@@ -68,7 +66,7 @@ export default function BudgetSummary({ budgets, transactions }) {
   const topOverBudgets = useMemo(
     () =>
       stats.budgetStatus
-        .filter((b) => b.status === 'over')
+        .filter((budget) => budget.status === "over")
         .sort((a, b) => b.percentage - a.percentage)
         .slice(0, 3),
     [stats.budgetStatus],
@@ -77,7 +75,7 @@ export default function BudgetSummary({ budgets, transactions }) {
   const topWarningBudgets = useMemo(
     () =>
       stats.budgetStatus
-        .filter((b) => b.status === 'warning')
+        .filter((budget) => budget.status === "warning")
         .sort((a, b) => b.percentage - a.percentage)
         .slice(0, 3),
     [stats.budgetStatus],
@@ -91,17 +89,17 @@ export default function BudgetSummary({ budgets, transactions }) {
       transition={{ duration: 0.3 }}
     >
       <h2 className="sr-only">Budget Summary</h2>
-      {/* Main Stats */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card className="bg-[#fff3c4]">
           <CardContent className="pt-6">
             <div className="space-y-2">
-              <p className="text-xs text-slate-600 font-medium">Total Budgeted</p>
+              <p className="text-xs text-slate-600 font-medium">Funds Allocated</p>
               <p className="text-lg sm:text-xl font-bold text-[#5c3ea5]">
                 {formatCurrency(stats.totalBudgeted)}
               </p>
               <p className="text-xs text-slate-500">
-                {budgets.length} budget{budgets.length !== 1 ? 's' : ''} set
+                {budgets.length} budget{budgets.length !== 1 ? "s" : ""} set
               </p>
             </div>
           </CardContent>
@@ -110,12 +108,12 @@ export default function BudgetSummary({ budgets, transactions }) {
         <Card className="bg-[#ffe1db]">
           <CardContent className="pt-6">
             <div className="space-y-2">
-              <p className="text-xs text-slate-600 font-medium">Total Spent</p>
+              <p className="text-xs text-slate-600 font-medium">Spent Against Budgets</p>
               <p className="text-lg sm:text-xl font-bold text-[#c2412d]">
                 {formatCurrency(stats.totalSpent)}
               </p>
               <p className="text-xs text-slate-500">
-                {((stats.totalSpent / stats.totalBudgeted) * 100 || 0).toFixed(1)}% of budget
+                {((stats.totalSpent / stats.totalBudgeted) * 100 || 0).toFixed(1)}% of allocated amount
               </p>
             </div>
           </CardContent>
@@ -124,14 +122,16 @@ export default function BudgetSummary({ budgets, transactions }) {
         <Card className="bg-[#dcf6e6]">
           <CardContent className="pt-6">
             <div className="space-y-2">
-              <p className="text-xs text-slate-600 font-medium">Remaining</p>
+              <p className="text-xs text-slate-600 font-medium">Budget Remaining</p>
               <p
-                className={`text-lg sm:text-xl font-bold ${stats.totalRemaining >= 0 ? 'text-[#1f6b44]' : 'text-[#c2412d]'}`}
+                className={`text-lg sm:text-xl font-bold ${
+                  stats.totalRemaining >= 0 ? "text-[#1f6b44]" : "text-[#c2412d]"
+                }`}
               >
                 {formatCurrency(Math.abs(stats.totalRemaining))}
               </p>
               <p className="text-xs text-slate-500">
-                {stats.totalRemaining >= 0 ? 'Under budget' : 'Over budget'}
+                {stats.totalRemaining >= 0 ? "Still within budgets" : "Above planned budget"}
               </p>
             </div>
           </CardContent>
@@ -144,15 +144,12 @@ export default function BudgetSummary({ budgets, transactions }) {
               <p className="text-lg sm:text-xl font-bold text-[#5c3ea5]">
                 {stats.averageUsage.toFixed(1)}%
               </p>
-              <p className="text-xs text-slate-500">
-                Across all budgets
-              </p>
+              <p className="text-xs text-slate-500">Across all budgets</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Status Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <Card className="bg-[#dcf6e6] hover:bg-[#c8efd9] transition-colors">
           <CardContent className="pt-6">
@@ -183,18 +180,23 @@ export default function BudgetSummary({ budgets, transactions }) {
         <Card className="bg-[#ffe1db] hover:bg-[#ffd1c7] transition-colors">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-[#c2412d] shrink-0 mt-0.5" />
+              <Wallet className="w-5 h-5 text-[#c2412d] shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-xs text-slate-600 font-medium">Over</p>
-                <p className="text-2xl font-bold text-[#c2412d]">{stats.overBudgetCount}</p>
-                <p className="text-xs text-slate-500">Exceeded budget</p>
+                <p className="text-xs text-slate-600 font-medium">Planning State</p>
+                <p className="text-2xl font-bold text-[#c2412d]">
+                  {salaryAmount > 0 && stats.salaryRemaining >= 0 ? "Ready" : "Check"}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {salaryAmount > 0 && stats.salaryRemaining >= 0
+                    ? "Budgets are within your base amount"
+                    : "Review your base amount in budget setup"}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Top Alerts */}
       {(topOverBudgets.length > 0 || topWarningBudgets.length > 0) && (
         <Card className="bg-white">
           <CardHeader className="pb-3 sm:pb-4">
@@ -210,7 +212,10 @@ export default function BudgetSummary({ budgets, transactions }) {
                   <h4 className="text-sm font-semibold text-[#c2412d]">Over Budget</h4>
                   <div className="space-y-1.5">
                     {topOverBudgets.map((budget) => (
-                      <div key={budget.id} className="flex items-center justify-between gap-2 text-xs sm:text-sm p-2 bg-[#ffe1db] rounded-lg border border-black/10">
+                      <div
+                        key={budget.id}
+                        className="flex items-center justify-between gap-2 text-xs sm:text-sm p-2 bg-[#ffe1db] rounded-lg border border-black/10"
+                      >
                         <span className="text-slate-700 truncate">{budget.category}</span>
                         <span className="text-[#c2412d] font-medium whitespace-nowrap">
                           +{formatCurrency(Math.abs(budget.remaining))}
@@ -225,7 +230,10 @@ export default function BudgetSummary({ budgets, transactions }) {
                   <h4 className="text-sm font-semibold text-[#8a6a00]">Approaching Limit</h4>
                   <div className="space-y-1.5">
                     {topWarningBudgets.map((budget) => (
-                      <div key={budget.id} className="flex items-center justify-between gap-2 text-xs sm:text-sm p-2 bg-[#fff3c4] rounded-lg border border-black/10">
+                      <div
+                        key={budget.id}
+                        className="flex items-center justify-between gap-2 text-xs sm:text-sm p-2 bg-[#fff3c4] rounded-lg border border-black/10"
+                      >
                         <span className="text-slate-700 truncate">{budget.category}</span>
                         <span className="text-[#8a6a00] font-medium whitespace-nowrap">
                           {budget.percentage.toFixed(1)}% used
